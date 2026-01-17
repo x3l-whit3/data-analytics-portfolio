@@ -1,5 +1,8 @@
 # Data Analytics Portfolio
 
+## Rendered reports (no GitHub navigation required):  
+###https://x3l-whit3.github.io/data-analytics-portfolio/
+
 ## End-to-end case studies using SQL and R
 
 Hi, I’m Alexandre Leblanc.  
@@ -80,5 +83,6 @@ Demonstrates abstraction, categorical encoding, and visualization of complex pat
 ## Contact
 - GitHub: <your link>
 - LinkedIn: <your link>
+
 
 
