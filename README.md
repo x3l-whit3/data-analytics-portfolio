@@ -30,7 +30,7 @@ Each case explores a real-world dataset and follows an end-to-end analytical pro
 Analysis of customer behavior across weekdays and membership types.  
 Focuses on identifying usage patterns, trade-offs in system availability, and implications for operational decisions.
 
-📄 Report: [1_cyclistic](1_cyclistic/cyclistic_case_study.html)  
+📄 Report: https://x3l-whit3.github.io/data-analytics-portfolio/1_cyclistic/cyclistic_case_study.html  
 📁 Folder: [1_cyclistic](1_cyclistic)
 
 
@@ -40,7 +40,7 @@ Focuses on identifying usage patterns, trade-offs in system availability, and im
 Explores daily and hourly activity intensity trends to uncover user behavior rhythms.  
 Demonstrates data aggregation, temporal analysis, and visualization clarity.
 
-📄 Report: [2_bellabeat](2_bellabeat/bellabeat_case_study.html)  
+📄 Report: https://x3l-whit3.github.io/data-analytics-portfolio/2_bellabeat/bellabeat_case_study.html
 📁 Folder: [2_bellabeat](2_bellabeat)
 
 
@@ -50,7 +50,7 @@ Demonstrates data aggregation, temporal analysis, and visualization clarity.
 Investigates cart and purchase behavior using event-level data.  
 Shows SQL extraction, state reconstruction, handling of missing values, and conversion insight generation.
 
-📄 Report: [3_rocket_retail](3_rocket_retail/rocket_retail_case_study.html)
+📄 Report: https://x3l-whit3.github.io/data-analytics-portfolio/3_rocket_retail/rocket_retail_case_study.html
 📁 Folder: [3_rocket_retail](3_rocket_retail)
 
 ---
@@ -77,3 +77,4 @@ Demonstrates abstraction, categorical encoding, and visualization of complex pat
 ## Contact
 - GitHub: <your link>
 - LinkedIn: <your link>
+
