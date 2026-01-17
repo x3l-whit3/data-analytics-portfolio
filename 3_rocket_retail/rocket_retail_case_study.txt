@@ -1,0 +1,159 @@
+---
+title: "Rocket Retail — Cart-to-Purchase Conversion Analysis"
+author: "Alexandre Leblanc"
+output: html_document
+---
+
+## 1. Business Question
+
+The goal of this analysis is to understand **user purchase behavior at the item level**, specifically:
+
+- How many items are **added to cart but never purchased**?
+- How many items are **both carted and purchased**?
+- Are there items that are **purchased without prior cart interaction**?
+
+This analysis helps evaluate **conversion efficiency**, **drop-off after expressed intent**, and the presence of **direct-purchase behaviors or tracking limitations**.
+
+---
+
+## 2. Data Overview
+
+The analysis is based on event-level retail data containing:
+
+- `visitorid`
+- `itemid`
+- `first_cart_ts` (timestamp of the first add-to-cart event, if any)
+- `purchase_ts` (timestamp of purchase event, if any)
+
+Because multiple events can occur for the same visitor–item pair, event-level data was **collapsed to an item-level grain** prior to analysis.
+
+---
+
+## 2.1 Data Extraction (SQL)
+
+The original Rocket Retail dataset is organized as a large event-level table containing multiple event types.
+To reduce noise and ensure correct analytical grain, I extracted only the **add-to-cart** and **transaction** events using SQL prior to analysis in R.
+
+
+
+```{r sql, eval=FALSE}
+
+SELECT visitorid,
+       itemid,
+       MIN(timestamp) AS first_cart_ts
+FROM `rocket-retail-483319.rocket_retail.events`
+WHERE event = 'addtocart'
+GROUP BY visitorid, itemid;
+
+
+
+SELECT visitorid,
+       itemid,
+       MIN(timestamp) AS purchase_ts
+FROM `rocket-retail-483319.rocket_retail.events`
+WHERE event = 'transaction'
+GROUP BY visitorid, itemid;
+
+```
+
+This case was designed to demonstrate independent problem framing and SQL-based data preparation prior to analysis, rather than following a predefined question set.
+
+
+---
+
+
+
+## 3. Analytical Approach
+
+Rather than counting raw events, I derived **state-level outcomes** for each `(visitorid, itemid)` pair.
+
+Each pair is classified into one of three mutually exclusive states:
+
+- **Carted Only** – item was added to cart but never purchased
+- **Carted & Bought** – item was added to cart and later purchased
+- **Bought Only** – item was purchased without a recorded cart event
+
+This required:
+- grouping by visitor and item
+- collapsing multiple rows into a single outcome
+- explicit handling of missing values (`NA`) to ensure logical correctness
+
+
+```{r importing_merging, eval=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+
+add_to_cart <- read_csv("archive-2/bq-results-addtocart.csv")
+bought <- read_csv("archive-2/bq-results-transaction.csv")
+
+merged_carted_bought <- bind_rows(add_to_cart, bought)
+
+carted_and_bought <- merged_carted_bought %>%
+  group_by(visitorid, itemid) %>% 
+  summarise( has_cart = any(first_cart_ts != "NA"), 
+             has_buy = any(purchase_ts != "NA"), 
+             .groups = "drop") %>% 
+  filter(has_cart, has_buy)
+
+```
+---
+
+## 4. Data Transformation (R)
+
+```{r create_states, eval=FALSE}
+
+state <- merged_carted_bought %>%
+     group_by(visitorid, itemid) %>%
+     summarise(
+         has_cart = any(first_cart_ts != "NA", na.rm = TRUE),
+         has_bought = any(purchase_ts != "NA", na.rm = TRUE),
+         state = case_when(
+             has_cart & has_bought ~ "Carted & Bought",
+             has_cart & !has_bought ~ "Carted Only",
+             !has_cart & has_bought ~ "Bought Only"
+         ),
+         .groups = "drop"
+     )
+ 
+ 
+state_count <- state %>%
+  count(state)
+
+state_count <- state_count %>%
+mutate(pct = n / sum(n))
+
+
+```
+---
+
+## 5. Visualization
+
+### Conversion States (Absolute Volume)
+
+```{r bar_chart, echo=FALSE}
+
+knitr::include_graphics("images/count_bar_chart_2.png")
+
+
+```
+
+
+### Conversion States (Proportion of Total)
+
+```{r pie_chart, echo=FALSE}
+
+knitr::include_graphics("pct_pie_chart_2.png")
+
+```
+---
+
+## 6. Act
+
+### Recommendations
+
+- **Reduce cart abandonment:** A large share of visitor–item pairs fall into the “Carted Only” state. This suggests meaningful drop-off after intent is expressed. Recommended next steps include testing checkout friction reductions (fewer steps, clearer shipping costs, guest checkout) and targeted reminders for carted items.
+
+- **Investigate “Bought Only” behavior:** A smaller but non-zero portion of purchases occur without a recorded cart event. This may indicate direct-purchase flows (e.g., “Buy Now”), tracking gaps, or edge-case behavior. Confirming the underlying cause would improve funnel measurement accuracy.
+
+- **Segment follow-up analysis:** In future work, conversion states can be broken down by time windows (e.g., cart-to-buy lag), product category, or user cohorts to identify where conversions succeed and where drop-off is concentrated.

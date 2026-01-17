@@ -1,0 +1,320 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Case Study 01},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Case Study 01}
+\author{}
+\date{\vspace{-2.5em}2025-12-05}
+
+\begin{document}
+\maketitle
+
+\subsection{Case study documentation}\label{case-study-documentation}
+
+I followed the APPASA model for this case study. I tried to do it by
+myself following the steps as learned in the Coursera's Data Analytics
+Google Course.
+
+\subsection{Scenario context}\label{scenario-context}
+
+Cyclistic is a bike-sharing company. They ask me to find how they casual
+users and members differ in the usage of their products.
+
+\subsection{Ask}\label{ask}
+
+\subsubsection{Main goals and expectations from the
+stakeholders}\label{main-goals-and-expectations-from-the-stakeholders}
+
+\begin{itemize}
+\item
+  Would it be good for them to convert the most users to members?
+\item
+  What are the main differences in the way the casual users and the
+  members use their services?
+\end{itemize}
+
+\subsection{Prepare}\label{prepare}
+
+\subsubsection{Quick desciption of the datasets and
+tools}\label{quick-desciption-of-the-datasets-and-tools}
+
+For this project, I use the tidyverse suite of packages along with
+ggplot2. The dataset consists of 12 month of historical trip data
+provided through a Coursera link to Cyclistic's public data repository.
+The data appears credible and covers variable such as ID, timestamps,
+locations, rideable type, and user type (member or casual).
+
+\subsection{Process}\label{process}
+
+\subsubsection{Data cleaning and preparation
+steps}\label{data-cleaning-and-preparation-steps}
+
+In this section, I perform the necessary transformations to prepare the
+data for analysis.
+
+This includes:
+
+\begin{itemize}
+\tightlist
+\item
+  importing and combining the 12 monthly files,
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\NormalTok{dec }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202511{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{nov }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202510{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{oct }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202509{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{sep }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202508{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{aug }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202507{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{jul }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202506{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{jun }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202505{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{may }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202504{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{apr }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202503{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{mar }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202502{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{feb }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202501{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+\NormalTok{jan }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}202412{-}divvy{-}tripdata.csv\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{all\_trips }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(jan, feb, mar, apr, may, jun, jul,aug, sep, oct, nov, dec)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  creating a ride\_length variable, removing zero-length rides,
+  generating weekdays variables,
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all\_trips }\OtherTok{\textless{}{-}}\NormalTok{ all\_trips }\SpecialCharTok{\%\textgreater{}\%}
+     \FunctionTok{mutate}\NormalTok{(}\AttributeTok{ride\_length =}\NormalTok{ ended\_at }\SpecialCharTok{{-}}\NormalTok{ started\_at, }
+        \AttributeTok{weekday =} \FunctionTok{wday}\NormalTok{(started\_at, }\AttributeTok{label =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+     \FunctionTok{filter}\NormalTok{(ride\_length }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  creating a variables that counts all rides by user type.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ride\_counts }\OtherTok{\textless{}{-}}\NormalTok{ all\_trips }\SpecialCharTok{\%\textgreater{}\%}
+     \FunctionTok{count}\NormalTok{(member\_casual, weekday)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Analyze}\label{analyze}
+
+\subsubsection{Find trends and patterns}\label{find-trends-and-patterns}
+
+Here I explore key statistics that relate directly to stakeholder
+questions:
+
+\begin{itemize}
+\tightlist
+\item
+  ride length summaries,
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ summary\_table }\OtherTok{\textless{}{-}}\NormalTok{ all\_trips }\SpecialCharTok{\%\textgreater{}\%}
+     \FunctionTok{group\_by}\NormalTok{(member\_casual, weekday) }\SpecialCharTok{\%\textgreater{}\%}
+     \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_length =} \FunctionTok{mean}\NormalTok{(ride\_length))}
+
+\NormalTok{ max\_length }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(all\_trips}\SpecialCharTok{$}\NormalTok{ride\_length, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+ 
+\NormalTok{ min\_length }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(all\_trips}\SpecialCharTok{$}\NormalTok{ride\_length, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\item
+  max\_length gave 94494.01 seconds as result. Very questionable data.
+  Possibly shows some issue.
+\item
+  min\_length pulled 0.046 seconds as result. Again can be indicator of
+  some issue or system testing. Value not to be considered in the
+  current task.
+\item
+  creating a function that determines the mode for the weekdays usage,
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mode\_finder }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, var) \{}
+\NormalTok{    data }\SpecialCharTok{\%\textgreater{}\%}
+        \FunctionTok{count}\NormalTok{(\{\{ var \}\}) }\SpecialCharTok{\%\textgreater{}\%}
+        \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{==} \FunctionTok{max}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}
+        \FunctionTok{pull}\NormalTok{(\{\{ var \}\})}
+\NormalTok{\}}
+
+
+\FunctionTok{mode\_finder}\NormalTok{(all\_trips, weekday)}
+\NormalTok{[}\DecValTok{1}\NormalTok{] Sat}
+\NormalTok{Levels}\SpecialCharTok{:}\NormalTok{ Sun }\SpecialCharTok{\textless{}}\NormalTok{ Mon }\SpecialCharTok{\textless{}}\NormalTok{ Tue }\SpecialCharTok{\textless{}}\NormalTok{ Wed }\SpecialCharTok{\textless{}}\NormalTok{ Thu }\SpecialCharTok{\textless{}}\NormalTok{ Fri }\SpecialCharTok{\textless{}}\NormalTok{ Sat}
+\end{Highlighting}
+\end{Shaded}
+
+Here we can see that saturday is the most busy day, all user-types
+included.
+
+\subsection{Share}\label{share}
+
+\subsubsection{Make datasets easy to understand and show story through
+visualizations}\label{make-datasets-easy-to-understand-and-show-story-through-visualizations}
+
+\begin{itemize}
+\item
+  Created 3 different visualizations for stakeholders to see what the
+  data tells.
+\item
+  All usages by weekdays.
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/sorted_by_weekday_all.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  All usages splitted by member type.
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/sorted_by_weekday.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  Side-by-side comparison as bar chart.
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/bar_chart_sorted.png}}
+
+\subsection{Act}\label{act}
+
+\subsubsection{Make some recommendations on what points should be seen,
+changed or added to achieve business
+goals}\label{make-some-recommendations-on-what-points-should-be-seen-changed-or-added-to-achieve-business-goals}
+
+\begin{itemize}
+\tightlist
+\item
+  Obviously members are more profitable quickly. Although they use bikes
+  for longer time, which can be counter-productive as less bikes are
+  available if users ride for longer. It can create a lack of
+  opportunity. As for the longest ride it suggests either a bike got
+  lost/stolen or is not working properly. Highly recommended to address
+  this issue as it can bias the data and might tell about some issues
+  with the product or system itself.
+\end{itemize}
+
+\end{document}

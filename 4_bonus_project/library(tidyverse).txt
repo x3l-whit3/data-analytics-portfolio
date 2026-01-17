@@ -1,0 +1,58 @@
+library(tidyverse)
+library(ggplot2)
+
+song_csv <- read_csv("Beat Instrument Pitch3.csv")
+
+ song_time <- song_csv %>%
+     separate(
+         Beat,
+         into = c("bar", "beat", "sub"),
+         sep = "\\.",
+         convert = TRUE
+     )
+
+
+
+ song_time <- song_time %>%
+     mutate(
+         beat_global = 
+             ((bar - 1) * 4 + (beat - 1)) +
+             (sub - 1) / subdivisions_per_beat,
+         time_sec = beat_global * (60 / BPM)
+     )
+
+
+
+ ggplot(song_time, aes(
+     x = time_sec,
+     y = Pitch,
+     color = Instrument,
+     shape = Instrument
+ )) +
+     geom_point(size = 2) +
+     theme(
+         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
+     ) +
+     scale_shape_manual(values = c(
+      "kick" = 16,
+      "snare" = 17,
+      "2nd snare" = 15,
+      "hat" = 3,
+      "chord" = 18,
+      "backlead" = 8,
+      "support" = 7
+     )) +
+     scale_x_continuous(
+         name = "Time (mm:ss)",
+         breaks = seq(0, max(song_time$time_sec), by = 2),
+         labels = sec_to_mmss
+     ) +
+     labs(
+         title = "Musical Pattern Encoded as Time-Series Events",
+         subtitle = "Pitch events across instruments over time"
+     )
+
+
+ sec_to_mmss <- function(x) {
+    sprintf("%d:%04.1f", floor(x / 60), x %% 60)
+}

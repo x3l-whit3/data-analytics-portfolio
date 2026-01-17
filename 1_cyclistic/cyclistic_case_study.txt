@@ -1,0 +1,193 @@
+---
+title: "Cyclistic Case Study"
+output:
+  pdf_document: default
+  html_document: default
+date: "2025-12-05"
+---
+
+## Case study documentation
+
+I followed the APPASA model for this case study. This case study follows the APPASA model as taught in the Google Data Analytics Professional Certificate.
+
+## Scenario context
+
+Cyclistic is a bike-sharing company. They asked me to identify how casual users and members differ in their usage of the service
+
+## Ask
+
+### Main goals and expectations from the stakeholders
+
+* Would it be good for them to convert the most users to members?
+
+* What are the main differences in the way the casual users and the members use their services?
+
+## Prepare
+
+### Quick desciption of the datasets and tools
+
+For this project, I use the tidyverse suite of packages along with ggplot2. The dataset consists of 12 months of historical trip data provided through a Coursera link to Cyclistic's public data repository. The data appears credible and covers variables such as ride IDs, timestamps, locations, rideable type, and user type (member or casual).
+
+## Process
+
+### Data cleaning and preparation steps
+
+In this section, I perform the necessary transformations to prepare the data for analysis.
+
+This includes:
+
+* importing and combining the 12 monthly files,
+
+```{r importing_merging, eval= FALSE}
+
+library(tidyverse)
+library(ggplot2)
+
+dec <- read_csv('202511-divvy-tripdata.csv')
+nov <- read_csv('202510-divvy-tripdata.csv')
+oct <- read_csv('202509-divvy-tripdata.csv')
+sep <- read_csv('202508-divvy-tripdata.csv')
+aug <- read_csv('202507-divvy-tripdata.csv')
+jul <- read_csv('202506-divvy-tripdata.csv')
+jun <- read_csv('202505-divvy-tripdata.csv')
+may <- read_csv('202504-divvy-tripdata.csv')
+apr <- read_csv('202503-divvy-tripdata.csv')
+mar <- read_csv('202502-divvy-tripdata.csv')
+feb <- read_csv('202501-divvy-tripdata.csv')
+jan <- read_csv('202412-divvy-tripdata.csv')
+
+all_trips <- bind_rows(jan, feb, mar, apr, may, jun, jul,aug, sep, oct, nov, dec)
+
+```
+* creating a ride_length variable, removing zero-length rides, generating weekdays variables,
+
+```{r create_all_trips, eval=FALSE}
+
+all_trips <- all_trips %>%
+     mutate(ride_length = ended_at - started_at, 
+     	weekday = wday(started_at, label = TRUE)) %>%
+     filter(ride_length > 0)
+
+```
+
+* creating a variables that counts all rides by user type.
+
+```{r create_ride_counts, eval=FALSE}
+
+ride_counts <- all_trips %>%
+     count(member_casual, weekday)
+
+```
+
+
+## Analyze
+
+### Find trends and patterns
+
+Here I explore key statistics that relate directly to stakeholder questions:
+
+* ride length summaries,
+
+```{r create_summary_table, eval=FALSE}
+
+ summary_table <- all_trips %>%
+     group_by(member_casual, weekday) %>%
+     summarise(mean_length = mean(ride_length))
+
+ max_length <- max(all_trips$ride_length, na.rm = TRUE)
+ 
+ min_length <- min(all_trips$ride_length, na.rm = TRUE)
+
+ 
+```
+- max_length gave 94494.01 seconds as result. This value is unusually high and likely reflects a data quality issue rather than actual user behavior.
+
+- min_length pulled 0.046 seconds as result. Again can be indicator of some issue or system testing. Value not to be considered in the current task.
+
+* creating a function that determines the mode for the weekdays usage,
+
+```{r find_mode, eval=FALSE}
+
+mode_finder <- function(data, var) {
+    data %>%
+        count({{ var }}) %>%
+        filter(n == max(n)) %>%
+        pull({{ var }})
+}
+
+
+mode_finder(all_trips, weekday)
+[1] Sat
+Levels: Sun < Mon < Tue < Wed < Thu < Fri < Sat
+
+```
+Here we can see that Saturday is the most busy day, all user-types included.
+
+
+## Share 
+
+### Make datasets easy to understand and show story through visualizations
+
+* Created 3 different visualizations for stakeholders to see what the data tells.
+
+ - All usages by weekdays.
+ 
+```{r image_1, echo=FALSE}
+
+   knitr::include_graphics("images/sorted_by_weekday_all.png")
+
+```
+ 
+ - All usages splitted by member type.
+
+```{r image_2, echo=FALSE}
+    
+   knitr::include_graphics("images/sorted_by_weekday.png")
+
+```
+
+
+ - Side-by-side comparison as bar chart.
+ 
+ 
+```{r image_3, echo=FALSE}
+    
+   knitr::include_graphics("images/bar_chart_sorted.png")
+
+```
+
+## Act 
+
+### Make some recommendations on what points should be seen, changed or added to achieve business goals 
+
+Based on the observed usage patterns, several actionable recommendations emerge:
+
+* Members consistently use the service more on weekdays, suggesting commuter-driven behavior. Marketing efforts targeting casual users could emphasize the convenience and cost efficiency of membership for regular weekday transportation.
+
+* Casual users show higher average ride lengths and stronger weekend usage, indicating leisure-oriented behavior. Promotional campaigns aimed at casual riders could focus on flexible short-term memberships or weekend-oriented offers.
+
+* While casual users exhibit longer average ride durations, this does not necessarily translate into higher operational efficiency. Longer rides reduce bike turnover and availability, particularly during peak demand periods. This represents a potential trade-off between leisure-oriented usage and system-wide accessibility that should be considered in membership conversion strategies.
+
+* The presence of unusually long rides suggests potential data quality issues or edge cases (e.g., rides not properly terminated). Addressing these anomalies would improve the reliability of future analyses and operational decision-making.
+
+Overall, converting frequent casual users into members appears to be a viable growth strategy, especially by aligning messaging with observed behavioral differences.
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
